@@ -71,7 +71,7 @@ public abstract class EntityLivingMixin extends Entity implements EntityLivingAc
         float yaw = entity.rotationYaw >= 0 ? entity.rotationYaw % 360 : entity.rotationYaw % 360 + 360;
         double angel = Math.atan2(entity.posX - this.posX, entity.posZ - this.posZ) * 180 / Math.PI;
 
-        boolean isInSight = this.getDistanceSqToEntity(entity) < absDist * absDist || Math.abs(yaw - angel) < 60;
+        boolean isInSight = this.getDistanceSqToEntity(entity) < absDist * absDist || Math.abs(yaw - angel) < 75;
 
         return isInSight && (canTopBeSeen || canCenterBeSeen || canBottomBeSeen || canEyeBeSeen);
     }

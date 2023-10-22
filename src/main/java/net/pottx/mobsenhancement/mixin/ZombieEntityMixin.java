@@ -20,7 +20,7 @@ public abstract class ZombieEntityMixin extends EntityZombie {
 
     @Inject(
             method = "<init>",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/src/EntityAITasks;addTask(ILnet/minecraft/src/EntityAIBase;)V", ordinal = 0)
+            at = @At(value = "TAIL")
     )
     private void addBreakBlockTask(CallbackInfo ci) {
         this.tasks.addTask(1, new EntityAIBreakBlock(this));

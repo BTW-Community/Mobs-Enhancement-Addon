@@ -29,7 +29,7 @@ public abstract class SkeletonEntityMixin extends EntitySkeleton {
 
     @Inject(
             method = "<init>",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/src/EntityAITasks;addTask(ILnet/minecraft/src/EntityAIBase;)V")
+            at = @At(value = "TAIL")
     )
     private void addFleeFromEnemyTask(CallbackInfo ci) {
         tasks.addTask(3, new EntityAIFleeFromEnemy(this, EntityPlayer.class, 0.375F, 24.0F, 5));
@@ -39,18 +39,18 @@ public abstract class SkeletonEntityMixin extends EntitySkeleton {
             method = "entityInit()V",
             at = @At(value = "TAIL")
     )
-    private void setSmartRangedAttackAI(CallbackInfo ci) {
+    private void setSmartAttackAI(CallbackInfo ci) {
         this.aiSmartRangedAttack = new EntityAISmartArrowAttack(this, 0.375F, 60, 6, 20F , 6F);
         this.aiSmartMeleeAttack = new EntityAISmartAttackOnCollide(this, EntityPlayer.class, 0.375F, false, 6);
     }
 
     @Inject(
-            method = "attackEntityWithRangedAttack(Lnet/minecraft/src/EntityLiving;F)V",
+            method = {"attackEntityWithRangedAttack", "method_4552"},
             at = @At(value = "INVOKE", target = "Lnet/minecraft/src/EnchantmentHelper;getEnchantmentLevel(ILnet/minecraft/src/ItemStack;)I"),
             locals = LocalCapture.CAPTURE_FAILHARD
     )
     private void resetArrowForPrediction(EntityLiving target, float fDamageModifier, CallbackInfo ci, EntityArrow arrow) {
-        ((EntityArrowAccess)arrow).resetForPrediction(this, target, 1.6F, 8F);
+        ((EntityArrowAccess)arrow).resetForPrediction(this, target, 1.6F, 6F);
     }
 
     @ModifyArgs(

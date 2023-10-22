@@ -18,7 +18,7 @@ public abstract class EntitySkeletonMixin extends EntityMob {
 
     @Inject(
             method = "<init>",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/src/EntityAITasks;addTask(ILnet/minecraft/src/EntityAIBase;)V", ordinal = 0)
+            at = @At(value = "TAIL")
     )
     private void resetMoveSpeed(CallbackInfo ci) {
         this.moveSpeed = 0.375F;

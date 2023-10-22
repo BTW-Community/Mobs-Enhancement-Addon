@@ -7,7 +7,7 @@ public class MobsEnhancementAddon extends BTWAddon {
     private static MobsEnhancementAddon instance;
 
     private MobsEnhancementAddon() {
-        super("Mobs Enhancement", "0.1.0", "Mo");
+        super("Mobs Enhancement", "0.1.1", "Mo");
     }
 
     @Override

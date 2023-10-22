@@ -21,6 +21,7 @@ This is a Minecraft Better Than Wolves addon that aims to slightly strengthen mo
 - Skeletons predict their target's position before ranged attacks.
 - Skeletons try not to get too close to dangerous targets when holding a bow.
 - Skeletons flee from dangerous targets when their health is low.
+- Skeletons' max health is decreased from 20 to 16.
 
 ### Creepers
 
@@ -33,6 +34,10 @@ This is a Minecraft Better Than Wolves addon that aims to slightly strengthen mo
 - Witches move faster.
 - Witches predict their target's position before throwing potions.
 - Witches try not to get too close to dangerous targets.
+
+### Spiders
+
+- Cobwebs don't only slow down entities' move speed, but also make players hardly rotate their look direction.
 
 ### Silverfish
 

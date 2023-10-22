@@ -18,7 +18,7 @@ public abstract class EntityWitchMixin extends EntityMob implements IRangedAttac
 
     @Inject(
             method = "<init>",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/src/EntityAITasks;addTask(ILnet/minecraft/src/EntityAIBase;)V", ordinal = 0)
+            at = @At(value = "TAIL")
     )
     private void resetMoveSpeed(CallbackInfo ci) {
         this.moveSpeed = 0.375F;
@@ -29,7 +29,7 @@ public abstract class EntityWitchMixin extends EntityMob implements IRangedAttac
             at = @At(value = "INVOKE", target = "Lnet/minecraft/src/EntityAITasks;addTask(ILnet/minecraft/src/EntityAIBase;)V", ordinal = 1)
     )
     private void modifyArrowAttackTask(Args args) {
-        args.set(1, new EntityAISmartArrowAttack(this, this.moveSpeed, 60, 9, 15.0F, 8F));
+        args.set(1, new EntityAISmartArrowAttack(this, 0.375F, 60, 9, 15.0F, 8F));
     }
 
     @ModifyArgs(

@@ -1,19 +1,18 @@
 {
   "schemaVersion": 1,
   "id": "mobsenhancement",
-  "version": "${version}",
+  "version": "0.1.0",
 
-  "name": "Mobs Enhancement",
+  "name": "Mobs Enhancement Addon",
   "description": "Slightly strengthens monsters.",
   "authors": [
     "Pot_Tx"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "sources": "https://github.com/BTW-Community/Mobs-Enhancement-Addon"
   },
 
-  "license": "CC0-1.0",
+  "license": "MIT",
 
   "environment": "*",
   "entrypoints": {

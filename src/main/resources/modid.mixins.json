@@ -1,0 +1,34 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.pottx.mobsenhancement.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "BiomeDecoratorMixin",
+    "CreeperEntityMixin",
+    "EntityAccess",
+    "EntityAITargetMixin",
+    "EntityArrowMixin",
+    "EntityCreeperAccess",
+    "EntityCreeperMixin",
+    "EntityLivingMixin",
+    "EntityPlayerMixin",
+    "EntityPlayerMPMixin",
+    "EntityRendererMixin",
+    "EntitySilverfishMixin",
+    "EntitySkeletonMixin",
+    "EntityThrowableMixin",
+    "EntityWitchMixin",
+    "EntityZombieMixin",
+    "GhastEntityMixin",
+    "MagmaCubeEntityMixin",
+    "RenderGhastMixin",
+    "SkeletonEntityMixin",
+    "ZombieEntityMixin",
+    "ZombiePigmanEntityMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

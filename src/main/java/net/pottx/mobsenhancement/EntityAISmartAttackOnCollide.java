@@ -90,7 +90,7 @@ public class EntityAISmartAttackOnCollide extends EntityAIBase
 
         this.attackTick = Math.max(this.attackTick - 1, 0);
         double dCombinedWidth = attacker.width + entityTarget.width;
-        double dToolLength = this.attacker.getHeldItem().getItem().isItemTool(this.attacker.getHeldItem()) ? 2.0D : 0.0D;
+        double dToolLength = this.attacker.getHeldItem() == null ? 0.0D : (this.attacker.getHeldItem().getItem().isItemTool(this.attacker.getHeldItem()) ? 2.0D : 0.0D);
         double var1 = dCombinedWidth * dCombinedWidth + dToolLength;
         
         if ( entityTarget == attacker.riddenByEntity )

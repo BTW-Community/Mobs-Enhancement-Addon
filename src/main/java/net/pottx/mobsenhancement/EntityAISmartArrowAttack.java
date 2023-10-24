@@ -70,6 +70,10 @@ public class EntityAISmartArrowAttack extends EntityAIBase
         attackCooldownCounter = attackInterval;
     }
 
+    public void startExecuting() {
+        canSeeTargetCounter = 20;
+    }
+
     public void updateTask() {
         double dDistSqToTarget = entityOwner.getDistanceSq(entityAttackTarget.posX, entityAttackTarget.boundingBox.minY, entityAttackTarget.posZ);
 
@@ -81,7 +85,7 @@ public class EntityAISmartArrowAttack extends EntityAIBase
             canSeeTargetCounter = 0;
         }
 
-        if (shouldFlee && dDistSqToTarget <= fleeRangeSq && canSeeTargetCounter >= 20) {
+        if (shouldFlee && dDistSqToTarget <= fleeRangeSq && canSeeTargetCounter >= 10) {
             if (attackCooldownCounter <= 5) {
                 isFleeing = false;
                 entityOwner.getNavigator().tryMoveToEntityLiving(entityAttackTarget, 0.25F);

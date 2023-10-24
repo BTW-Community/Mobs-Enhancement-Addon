@@ -15,7 +15,7 @@ public abstract class MagmaCubeEntityMixin extends EntityMagmaCube {
     public void onLivingUpdate() {
         super.onLivingUpdate();
         if (this.worldObj.isMaterialInBB(this.boundingBox.expand(-0.10000000149011612D, -0.4000000059604645D, -0.10000000149011612D), Material.lava)) {
-            this.addPotionEffect(new PotionEffect(10, 20, 2, true));
+            this.addPotionEffect(new PotionEffect(Potion.regeneration.id, 10, 2, true));
         }
     }
 

@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "BiomeDecoratorMixin",
+    "CreeperEntityAccess",
     "CreeperEntityMixin",
     "EntityAccess",
     "EntityAITargetMixin",
@@ -22,6 +23,7 @@
     "EntityZombieMixin",
     "GhastEntityMixin",
     "MagmaCubeEntityMixin",
+    "MobSpawnerBlockMixin",
     "RenderGhastMixin",
     "SkeletonEntityMixin",
     "ZombieEntityMixin",

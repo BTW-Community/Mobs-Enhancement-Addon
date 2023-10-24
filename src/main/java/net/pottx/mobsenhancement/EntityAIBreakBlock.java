@@ -10,6 +10,7 @@ public class EntityAIBreakBlock extends EntityAIBase {
     private int breakingTime;
     private int maxBreakingTime;
     private int breakingProgress = -1;
+    private int breakingCooldownCounter = 0;
     private Block targetBlock;
     private boolean hasStoppedBlockBreaking;
 
@@ -19,12 +20,14 @@ public class EntityAIBreakBlock extends EntityAIBase {
 
     @Override
     public boolean shouldExecute() {
-        if (!this.theEntity.worldObj.getGameRules().getGameRuleBooleanValue("mobGriefing")) {
+        this.breakingCooldownCounter --;
+
+        if (!this.theEntity.worldObj.getGameRules().getGameRuleBooleanValue("mobGriefing") || this.breakingCooldownCounter > 0) {
             return false;
         } else if (this.theEntity.getAttackTarget() != null) {
             PathEntity path = this.theEntity.getNavigator().getPath();
             PathPoint tempPathPoint;
-            float yaw = this.theEntity.rotationYaw >= 0 ? this.theEntity.rotationYaw % 360 : this.theEntity.rotationYaw % 360 + 360;
+            float yaw = this.theEntity.rotationYawHead >= 0 ? this.theEntity.rotationYawHead % 360 : this.theEntity.rotationYawHead % 360 + 360;
             double angel;
             boolean lor = Math.random() < 0.5;
             int[][] dxzList;
@@ -53,7 +56,7 @@ public class EntityAIBreakBlock extends EntityAIBase {
                 tempPathPoint = new PathPoint(MathHelper.floor_double(this.theEntity.posX), MathHelper.floor_double(this.theEntity.posY), MathHelper.floor_double(this.theEntity.posZ));
             }
 
-            for (int dy : new int[]{0, 1}) {
+            for (int dy : new int[]{1, 0}) {
 
                 for (int[] dxz : dxzList) {
 
@@ -64,7 +67,7 @@ public class EntityAIBreakBlock extends EntityAIBase {
                     angel = angel >= 0 ? 360 - angel : 0 - angel;
 
                     if (this.theEntity.getDistanceSq((double) this.targetPosX + 0.5F, this.theEntity.posY, (double) this.targetPosZ + 0.5F) <= 2.25D
-                            && Math.abs(yaw - (float) angel) <= 45 && Math.abs(this.theEntity.motionX) < 0.25D && Math.abs(this.theEntity.motionY + 0.0784000015258789D) < 0.01D && Math.abs(this.theEntity.motionZ) < 0.25D) {
+                            && (Math.abs(yaw - (float) angel) <= 45 || Math.abs(yaw - (float) angel) >= 315) && Math.abs(this.theEntity.motionX) < 0.25D && Math.abs(this.theEntity.motionY + 0.0784000015258789D) < 0.01D && Math.abs(this.theEntity.motionZ) < 0.25D) {
                         ItemStack tool = this.theEntity.getHeldItem();
                         this.targetBlock = this.findBreakableBlock(this.targetPosX, this.targetPosY, this.targetPosZ, tool);
 
@@ -92,6 +95,7 @@ public class EntityAIBreakBlock extends EntityAIBase {
 
     public void resetTask() {
         super.resetTask();
+        this.breakingCooldownCounter = 20;
         this.theEntity.worldObj.destroyBlockInWorldPartially(this.theEntity.entityId, this.targetPosX, this.targetPosY, this.targetPosZ, -1);
     }
 
@@ -101,11 +105,11 @@ public class EntityAIBreakBlock extends EntityAIBase {
     }
 
     public void updateTask() {
-        float yaw = this.theEntity.rotationYaw >= 0 ? this.theEntity.rotationYaw % 360 : this.theEntity.rotationYaw % 360 + 360;
+        float yaw = this.theEntity.rotationYawHead >= 0 ? this.theEntity.rotationYawHead % 360 : this.theEntity.rotationYawHead % 360 + 360;
         double angel = Math.atan2(targetPosX + 0.5F - this.theEntity.posX, targetPosZ + 0.5F - this.theEntity.posZ) * 180 / Math.PI;
         angel = angel >= 0 ? 360 - angel : 0 - angel;
         if (this.theEntity.getDistanceSq((double)this.targetPosX + 0.5F, this.theEntity.posY, (double)this.targetPosZ + 0.5F) > 2.25D
-                || Math.abs(yaw - (float)angel) > 45 || Math.abs(this.theEntity.motionX) >= 0.25D || Math.abs(this.theEntity.motionY + 0.0784000015258789D) >= 0.01D || Math.abs(this.theEntity.motionZ) >= 0.25D || this.theEntity.isLivingDead)
+                || (Math.abs(yaw - (float)angel) > 45 && Math.abs(yaw - (float)angel) < 315) || Math.abs(this.theEntity.motionX) >= 0.25D || Math.abs(this.theEntity.motionY + 0.0784000015258789D) >= 0.01D || Math.abs(this.theEntity.motionZ) >= 0.25D || this.theEntity.isLivingDead)
         {
             this.hasStoppedBlockBreaking = true;
             this.theEntity.worldObj.destroyBlockInWorldPartially(this.theEntity.entityId, this.targetPosX, this.targetPosY, this.targetPosZ, -1);
@@ -115,6 +119,7 @@ public class EntityAIBreakBlock extends EntityAIBase {
         int progress = (int)((float)this.breakingTime / this.maxBreakingTime * 10.0F);
 
         if (progress != this.breakingProgress) {
+            this.theEntity.swingItem();
             this.theEntity.worldObj.destroyBlockInWorldPartially(this.theEntity.entityId, this.targetPosX, this.targetPosY, this.targetPosZ, progress);
             this.breakingProgress = progress;
             this.theEntity.worldObj.playAuxSFX(2001, this.targetPosX, this.targetPosY, this.targetPosZ, this.targetBlock.blockID);
@@ -122,6 +127,7 @@ public class EntityAIBreakBlock extends EntityAIBase {
 
         if (this.breakingTime >= this.maxBreakingTime)
         {
+            this.theEntity.swingItem();
             this.hasStoppedBlockBreaking = true;
             this.targetBlock.dropComponentItemsOnBadBreak(this.theEntity.worldObj, this.targetPosX, this.targetPosY, this.targetPosZ, this.theEntity.worldObj.getBlockMetadata(this.targetPosX, this.targetPosY, this.targetPosZ), 1.0F);
             this.theEntity.worldObj.setBlockToAir(this.targetPosX, this.targetPosY, this.targetPosZ);

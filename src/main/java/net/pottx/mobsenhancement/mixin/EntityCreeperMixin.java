@@ -19,7 +19,7 @@ public abstract class EntityCreeperMixin extends EntityMob {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/src/World;createExplosion(Lnet/minecraft/src/Entity;DDDFZ)Lnet/minecraft/src/Explosion;", ordinal = 0)
     )
     private void resetExplosionCenter(Args args){
-        args.set(2, this.posY + 1);
+        args.set(2, this.posY + 0.5 * this.height);
     }
 
     @ModifyArgs(
@@ -27,6 +27,6 @@ public abstract class EntityCreeperMixin extends EntityMob {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/src/World;createExplosion(Lnet/minecraft/src/Entity;DDDFZ)Lnet/minecraft/src/Explosion;", ordinal = 1)
     )
     private void resetExplosionCenterPowered(Args args){
-        args.set(2, this.posY + 1);
+        args.set(2, this.posY + 0.5 * this.height);
     }
 }

@@ -45,7 +45,7 @@ public abstract class SkeletonEntityMixin extends EntitySkeleton {
     }
 
     @Inject(
-            method = {"attackEntityWithRangedAttack", "method_4552"},
+            method = {"attackEntityWithRangedAttack(Lnet/minecraft/src/EntityLiving;F)V", "method_4552"},
             at = @At(value = "INVOKE", target = "Lnet/minecraft/src/EnchantmentHelper;getEnchantmentLevel(ILnet/minecraft/src/ItemStack;)I"),
             locals = LocalCapture.CAPTURE_FAILHARD
     )

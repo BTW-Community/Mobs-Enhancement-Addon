@@ -26,8 +26,9 @@ This is a Minecraft Better Than Wolves addon that aims to slightly strengthen mo
 ### Creepers
 
 - Creepers' fuse time is decreased from 1.5 seconds to 1 second.
+- Creepers' explosions spawn at the center of them, instead of the bottom.
 - Creepers have a chance to instantly explode when interacted with shears.
-- Creepers instantly explode when damaged by explosions.
+- Creepers explode when damaged by explosions.
 
 ### Witches
 
@@ -68,3 +69,7 @@ This is a Minecraft Better Than Wolves addon that aims to slightly strengthen mo
 ### Ender Dragons
 
 - Players' gloom level rapidly increase when being close to an ender dragon.
+
+### Spawners
+
+- Spawners curse nearby players with a wither effect when broken.

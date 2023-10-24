@@ -5,6 +5,7 @@ import net.minecraft.src.Entity;
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -12,6 +13,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(EntityLiving.class)
 public abstract class EntityLivingMixin extends Entity implements EntityLivingAccess {
+    @Shadow
+    public float rotationYawHead;
+
     public EntityLivingMixin(World par1World) {
         super(par1World);
     }
@@ -68,10 +72,14 @@ public abstract class EntityLivingMixin extends Entity implements EntityLivingAc
                 worldObj.getWorldVec3Pool().getVecFromPool( posX, posY + (double)getEyeHeight(), posZ ),
                 worldObj.getWorldVec3Pool().getVecFromPool( entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ ), false, true ) == null;
 
-        float yaw = entity.rotationYaw >= 0 ? entity.rotationYaw % 360 : entity.rotationYaw % 360 + 360;
+        float yaw = this.rotationYawHead >= 0 ? this.rotationYawHead % 360 : this.rotationYawHead % 360 + 360;
         double angel = Math.atan2(entity.posX - this.posX, entity.posZ - this.posZ) * 180 / Math.PI;
+        angel = angel >= 0 ? 360 - angel : 0 - angel;
 
-        boolean isInSight = this.getDistanceSqToEntity(entity) < absDist * absDist || Math.abs(yaw - angel) < 75;
+        System.out.println(yaw);
+        System.out.println(angel + "\n");
+
+        boolean isInSight = this.getDistanceSqToEntity(entity) < absDist * absDist || Math.abs(yaw - angel) < 75 || Math.abs(yaw - angel) > 185;
 
         return isInSight && (canTopBeSeen || canCenterBeSeen || canBottomBeSeen || canEyeBeSeen);
     }

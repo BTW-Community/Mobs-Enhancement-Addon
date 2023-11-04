@@ -3,6 +3,7 @@
 package net.pottx.mobsenhancement;
 
 import net.minecraft.src.*;
+import net.pottx.mobsenhancement.access.WitherEntityAccess;
 
 public class EntityAISmartArrowAttack extends EntityAIBase
 {
@@ -46,6 +47,8 @@ public class EntityAISmartArrowAttack extends EntityAIBase
         EntityLiving target = entityOwner.getAttackTarget();
 
         if (target == null) {
+            return false;
+        } else if (this.entityOwner instanceof EntityWither && ((WitherEntityAccess)this.entityOwner).getIsDoingSpecialAttack()) {
             return false;
         } else {
             shouldFlee = target instanceof EntityPlayer || target.getAttackTarget() == entityOwner;

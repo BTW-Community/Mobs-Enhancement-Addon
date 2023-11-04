@@ -1,11 +1,11 @@
 package net.pottx.mobsenhancement.mixin;
 
 import btw.entity.mob.SkeletonEntity;
-import net.pottx.mobsenhancement.EntityAIFleeFromEnemy;
-import net.pottx.mobsenhancement.EntityAISmartAttackOnCollide;
-import net.pottx.mobsenhancement.EntityAISmartArrowAttack;
+import btw.entity.mob.villager.VillagerEntity;
+import net.pottx.mobsenhancement.*;
 import net.pottx.mobsenhancement.access.EntityArrowAccess;
 import net.minecraft.src.*;
+import net.pottx.mobsenhancement.access.EntityMobAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -31,8 +31,11 @@ public abstract class SkeletonEntityMixin extends EntitySkeleton {
             method = "<init>",
             at = @At(value = "TAIL")
     )
-    private void addFleeFromEnemyTask(CallbackInfo ci) {
+    private void addExtraTasks(CallbackInfo ci) {
+        tasks.addTask(2, new EntityAIFleeFromExplosion(this, 0.375F, 4.0F));
         tasks.addTask(3, new EntityAIFleeFromEnemy(this, EntityPlayer.class, 0.375F, 24.0F, 5));
+        tasks.addTask(4, new SkeletonBreakTorchBehavior(this));
+        this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, VillagerEntity.class, 24.0F, 0, ((EntityMobAccess)this).getCanXray() == (byte)0));
     }
 
     @Inject(
@@ -41,7 +44,7 @@ public abstract class SkeletonEntityMixin extends EntitySkeleton {
     )
     private void setSmartAttackAI(CallbackInfo ci) {
         this.aiSmartRangedAttack = new EntityAISmartArrowAttack(this, 0.375F, 60, 6, 20F , 6F);
-        this.aiSmartMeleeAttack = new EntityAISmartAttackOnCollide(this, EntityPlayer.class, 0.375F, false, 6);
+        this.aiSmartMeleeAttack = new EntityAISmartAttackOnCollide(this, 0.375F, false, 6);
     }
 
     @Inject(

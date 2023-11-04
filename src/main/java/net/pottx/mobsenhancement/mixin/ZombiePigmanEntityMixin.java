@@ -4,7 +4,11 @@ import btw.entity.mob.ZombiePigmanEntity;
 import net.minecraft.src.EntityPigZombie;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.World;
+import net.pottx.mobsenhancement.EntityAIFleeFromExplosion;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ZombiePigmanEntity.class)
 public abstract class ZombiePigmanEntityMixin extends EntityPigZombie {

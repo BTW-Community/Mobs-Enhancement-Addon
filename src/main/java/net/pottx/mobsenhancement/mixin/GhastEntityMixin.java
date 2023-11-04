@@ -20,7 +20,7 @@ public abstract class GhastEntityMixin extends EntityGhast {
             at = @At(value = "TAIL")
     )
     private void replaceTexture(CallbackInfo ci) {
-        this.texture = "/mobsenhancementtex/ghast.png";
+        this.texture = "/meatextures/ghast.png";
     }
 
     @Override
@@ -37,6 +37,6 @@ public abstract class GhastEntityMixin extends EntityGhast {
     public void onUpdate() {
         super.onUpdate();
         byte var1 = this.dataWatcher.getWatchableObjectByte(16);
-        this.texture = var1 == 1 ? "/mobsenhancementtex/ghast_fire.png" : "/mobsenhancementtex/ghast.png";
+        this.texture = var1 == 1 ? "/meatextures/ghast_fire.png" : "/meatextures/ghast.png";
     }
 }

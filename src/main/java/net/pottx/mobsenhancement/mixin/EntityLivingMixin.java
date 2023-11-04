@@ -1,5 +1,6 @@
 package net.pottx.mobsenhancement.mixin;
 
+import net.pottx.mobsenhancement.MEAUtils;
 import net.pottx.mobsenhancement.access.EntityLivingAccess;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityLiving;
@@ -56,19 +57,19 @@ public abstract class EntityLivingMixin extends Entity implements EntityLivingAc
 
     @Unique
     public boolean realisticCanEntityBeSeen(Entity entity, double absDist) {
-        boolean canTopBeSeen = worldObj.rayTraceBlocks_do_do(
+        boolean canTopBeSeen = MEAUtils.rayTraceBlocks_do_do_do( worldObj,
                 worldObj.getWorldVec3Pool().getVecFromPool( posX, posY + (double)getEyeHeight(), posZ ),
                 worldObj.getWorldVec3Pool().getVecFromPool( entity.posX, entity.posY + entity.height, entity.posZ ), false, true ) == null;
 
-        boolean canCenterBeSeen = worldObj.rayTraceBlocks_do_do(
+        boolean canCenterBeSeen = MEAUtils.rayTraceBlocks_do_do_do( worldObj,
                 worldObj.getWorldVec3Pool().getVecFromPool( posX, posY + (double)getEyeHeight(), posZ ),
                 worldObj.getWorldVec3Pool().getVecFromPool( entity.posX, entity.posY + (entity.height / 2F), entity.posZ ), false, true ) == null;
 
-        boolean canBottomBeSeen = worldObj.rayTraceBlocks_do_do(
+        boolean canBottomBeSeen = MEAUtils.rayTraceBlocks_do_do_do( worldObj,
                 worldObj.getWorldVec3Pool().getVecFromPool( posX, posY + (double)getEyeHeight(), posZ ),
                 worldObj.getWorldVec3Pool().getVecFromPool( entity.posX, entity.posY, entity.posZ ), false, true ) == null;
 
-        boolean canEyeBeSeen = worldObj.rayTraceBlocks_do_do(
+        boolean canEyeBeSeen = MEAUtils.rayTraceBlocks_do_do_do( worldObj,
                 worldObj.getWorldVec3Pool().getVecFromPool( posX, posY + (double)getEyeHeight(), posZ ),
                 worldObj.getWorldVec3Pool().getVecFromPool( entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ ), false, true ) == null;
 
@@ -76,11 +77,32 @@ public abstract class EntityLivingMixin extends Entity implements EntityLivingAc
         double angel = Math.atan2(entity.posX - this.posX, entity.posZ - this.posZ) * 180 / Math.PI;
         angel = angel >= 0 ? 360 - angel : 0 - angel;
 
-        System.out.println(yaw);
-        System.out.println(angel + "\n");
+        double realAbsDist = absDist;
+        if (entity.isSneaking()) realAbsDist *= 0.5D;
 
-        boolean isInSight = this.getDistanceSqToEntity(entity) < absDist * absDist || Math.abs(yaw - angel) < 75 || Math.abs(yaw - angel) > 185;
+        boolean isInSight = this.getDistanceSqToEntity(entity) < realAbsDist * realAbsDist || Math.abs(yaw - angel) < 75 || Math.abs(yaw - angel) > 185;
 
         return isInSight && (canTopBeSeen || canCenterBeSeen || canBottomBeSeen || canEyeBeSeen);
+    }
+
+    @Unique
+    public boolean realisticCanEntityBeSensed(Entity entity) {
+        boolean canTopBeSeen = MEAUtils.rayTraceBlocks_do_do_do( worldObj,
+                worldObj.getWorldVec3Pool().getVecFromPool( posX, posY + (double)getEyeHeight(), posZ ),
+                worldObj.getWorldVec3Pool().getVecFromPool( entity.posX, entity.posY + entity.height, entity.posZ ), false, true ) == null;
+
+        boolean canCenterBeSeen = MEAUtils.rayTraceBlocks_do_do_do( worldObj,
+                worldObj.getWorldVec3Pool().getVecFromPool( posX, posY + (double)getEyeHeight(), posZ ),
+                worldObj.getWorldVec3Pool().getVecFromPool( entity.posX, entity.posY + (entity.height / 2F), entity.posZ ), false, true ) == null;
+
+        boolean canBottomBeSeen = MEAUtils.rayTraceBlocks_do_do_do( worldObj,
+                worldObj.getWorldVec3Pool().getVecFromPool( posX, posY + (double)getEyeHeight(), posZ ),
+                worldObj.getWorldVec3Pool().getVecFromPool( entity.posX, entity.posY, entity.posZ ), false, true ) == null;
+
+        boolean canEyeBeSeen = MEAUtils.rayTraceBlocks_do_do_do( worldObj,
+                worldObj.getWorldVec3Pool().getVecFromPool( posX, posY + (double)getEyeHeight(), posZ ),
+                worldObj.getWorldVec3Pool().getVecFromPool( entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ ), false, true ) == null;
+
+        return canTopBeSeen || canCenterBeSeen || canBottomBeSeen || canEyeBeSeen;
     }
 }

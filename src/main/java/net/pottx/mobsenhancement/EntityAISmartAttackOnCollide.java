@@ -13,18 +13,16 @@ public class EntityAISmartAttackOnCollide extends EntityAIBase
     public boolean field_75437_f;
 
     public PathEntity entityPathEntity;
-    public Class classTarget;
     private int field_75445_i;
 
     private int minHealth;
     private boolean shouldFlee;
 
-    public EntityAISmartAttackOnCollide(EntityLiving par1EntityLiving, Class classTarget, float par2, boolean par3, int iminHealth)
+    public EntityAISmartAttackOnCollide(EntityLiving par1EntityLiving, float par2, boolean par3, int iminHealth)
     {
         this.attackTick = 0;
         this.attacker = par1EntityLiving;
         this.worldObj = par1EntityLiving.worldObj;
-        this.classTarget = classTarget;
         this.field_75440_e = par2;
         this.field_75437_f = par3;
         this.minHealth = iminHealth;
@@ -39,9 +37,8 @@ public class EntityAISmartAttackOnCollide extends EntityAIBase
             return false;
         } else {
             this.shouldFlee = var1 instanceof EntityPlayer || var1.getAttackTarget() == this.attacker;
-            if (this.classTarget != null && !this.classTarget.isAssignableFrom(var1.getClass())) {
-                return false;
-            } else if (this.shouldFlee && this.attacker.getHealth() < minHealth) {
+
+            if (this.shouldFlee && this.attacker.getHealth() < minHealth) {
                 return false;
             } else {
                 this.entityTarget = var1;
@@ -91,7 +88,7 @@ public class EntityAISmartAttackOnCollide extends EntityAIBase
         this.attackTick = Math.max(this.attackTick - 1, 0);
         double dCombinedWidth = attacker.width + entityTarget.width;
         double dToolLength = this.attacker.getHeldItem() == null ? 0.0D : (this.attacker.getHeldItem().getItem().isItemTool(this.attacker.getHeldItem()) ? 2.0D : 0.0D);
-        double var1 = dCombinedWidth * dCombinedWidth + dToolLength;
+        double var1 = (dCombinedWidth + dToolLength) * (dCombinedWidth + dToolLength);
         
         if ( entityTarget == attacker.riddenByEntity )
         {

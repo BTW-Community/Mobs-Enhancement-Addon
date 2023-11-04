@@ -16,7 +16,15 @@ public abstract class EntityAITargetMixin extends EntityAIBase {
             method = "isSuitableTarget(Lnet/minecraft/src/EntityLiving;Z)Z",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/src/EntitySenses;canSee(Lnet/minecraft/src/Entity;)Z")
     )
-    private boolean realisticCanSeeCheck(EntitySenses entitySenses, Entity par1Entity) {
+    private boolean doRealisticCanSeeCheck(EntitySenses entitySenses, Entity par1Entity) {
         return ((EntityLivingAccess)this.taskOwner).realisticCanEntityBeSeen(par1Entity, 4);
+    }
+
+    @Redirect(
+            method = "continueExecuting()Z",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/src/EntitySenses;canSee(Lnet/minecraft/src/Entity;)Z")
+    )
+    private boolean doRealisticCanSenseCheck(EntitySenses entitySenses, Entity par1Entity) {
+        return ((EntityLivingAccess)this.taskOwner).realisticCanEntityBeSensed(par1Entity);
     }
 }

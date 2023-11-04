@@ -19,7 +19,6 @@ public abstract class EntitySilverfishMixin extends EntityMob {
     )
     private void splitWhenAttacked(DamageSource par1DamageSource, int par2, CallbackInfoReturnable<Boolean> cir) {
         if (par1DamageSource instanceof EntityDamageSource && par2 < this.getHealth()) {
-            //this.worldObj.spawnParticle("largeexplode", this.posX, this.posY + 0.25, this.posZ, 0.25D, 0.0D, 0.0D);
             this.split();
         }
     }

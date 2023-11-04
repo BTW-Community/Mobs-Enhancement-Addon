@@ -133,6 +133,11 @@ public class EntityAIBreakBlock extends EntityAIBase {
             this.theEntity.worldObj.setBlockToAir(this.targetPosX, this.targetPosY, this.targetPosZ);
             this.theEntity.worldObj.playAuxSFX(2001, this.targetPosX, this.targetPosY, this.targetPosZ, this.targetBlock.blockID);
         }
+
+        if (this.theEntity.getAttackTarget() == null || this.theEntity.getEntitySenses().canSee(this.theEntity.getAttackTarget())) {
+            this.theEntity.getNavigator().clearPathEntity();
+            this.theEntity.getLookHelper().setLookPosition((double)this.targetPosX + 0.5F, (double)this.targetPosY + 0.5F, (double)this.targetPosZ + 0.5F, 15F, (float)this.theEntity.getVerticalFaceSpeed() * 1.5F);
+        }
     }
 
     private Block findBreakableBlock(int x, int y, int z, ItemStack tool) {

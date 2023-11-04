@@ -2,7 +2,7 @@ package net.pottx.mobsenhancement.mixin;
 
 
 import btw.entity.mob.GhastEntity;
-import net.pottx.mobsenhancement.Utils;
+import net.pottx.mobsenhancement.MEAUtils;
 import net.pottx.mobsenhancement.access.EntityArrowAccess;
 import net.minecraft.src.*;
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,8 +29,8 @@ public abstract class EntityArrowMixin extends Entity implements IProjectile, En
         double initRelativeX = target.posX - owner.posX;
         double relativeY = target.boundingBox.minY + (double)(target.height / 3.0F) - this.posY;
         double initRelativeZ = target.posZ - owner.posZ;
-        double relativeX = Utils.predictRelativeXZOnRangedHit(target, initRelativeX, relativeY, initRelativeZ, arrowVelocity)[0];
-        double relativeZ = Utils.predictRelativeXZOnRangedHit(target, initRelativeX, relativeY, initRelativeZ, arrowVelocity)[1];
+        double relativeX = MEAUtils.predictRelativeXZOnRangedHit(target, initRelativeX, relativeY, initRelativeZ, arrowVelocity)[0];
+        double relativeZ = MEAUtils.predictRelativeXZOnRangedHit(target, initRelativeX, relativeY, initRelativeZ, arrowVelocity)[1];
         double horizontalDist = (double)MathHelper.sqrt_double(relativeX * relativeX + relativeZ * relativeZ);
 
         if (horizontalDist >= 1.0E-7D)

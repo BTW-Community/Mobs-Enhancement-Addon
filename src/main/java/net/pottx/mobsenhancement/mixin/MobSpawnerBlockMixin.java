@@ -28,6 +28,7 @@ public abstract class MobSpawnerBlockMixin extends BlockMobSpawner {
         if (!closePlayers.isEmpty()) {
             for (Object closePlayer : closePlayers) {
                 world.playSoundAtEntity((EntityPlayer)closePlayer, "mob.ghast.scream", 1.0F, 0.5F);
+                ((EntityPlayer)closePlayer).addPotionEffect(new PotionEffect(Potion.blindness.id, 60, 0, true));
                 ((EntityPlayer)closePlayer).addPotionEffect(new PotionEffect(Potion.wither.id, 240, 1));
             }
         }

@@ -2,6 +2,7 @@ package net.pottx.mobsenhancement.mixin;
 
 import btw.item.BTWItems;
 import net.minecraft.src.*;
+import net.pottx.mobsenhancement.access.EntityMobAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -39,7 +40,7 @@ public abstract class EntitySkeletonMixin extends EntityMob {
     )
     private void resetRandomWeapon(CallbackInfo ci) {
         if (this.rand.nextInt(8) == 0) {
-            this.setCurrentItemOrArmor(0, this.rand.nextInt(2) == 0 ? new ItemStack(BTWItems.boneClub) : new ItemStack(Item.axeStone));
+            this.setCurrentItemOrArmor(0, this.rand.nextInt(4) == 0 ? new ItemStack(Item.axeStone) : new ItemStack(BTWItems.boneClub));
         }
     }
 
@@ -48,6 +49,14 @@ public abstract class EntitySkeletonMixin extends EntityMob {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/src/EntityAITasks;addTask(ILnet/minecraft/src/EntityAIBase;)V", ordinal = 7)
     )
     private void modifyNearestAttackableTargetTask(Args args) {
-        args.set(1, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 24.0F, 0, true));
+        args.set(1, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 24.0F, 0, ((EntityMobAccess)this).getCanXray() == (byte)0));
+    }
+
+    @ModifyArgs(
+            method = "<init>(Lnet/minecraft/src/World;)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/src/EntityAITasks;addTask(ILnet/minecraft/src/EntityAIBase;)V", ordinal = 2)
+    )
+    private void modifyFleeSunTask(Args args) {
+        args.set(1, new EntityAIFleeSun(this, 0.375F));
     }
 }

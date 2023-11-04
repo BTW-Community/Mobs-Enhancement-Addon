@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "mobsenhancement",
-  "version": "0.1.2",
+  "version": "0.1.3",
 
   "name": "Mobs Enhancement Addon",
   "description": "Slightly strengthens monsters.",
@@ -16,12 +16,8 @@
 
   "environment": "*",
   "entrypoints": {
-    "init": [
-      "net.pottx.mobsenhancement.MobsEnhancementAddon"
-    ],
-    "preLaunch": [
-      "net.pottx.mobsenhancement.MobsEnhancementPreLaunchInitializer"
-    ]
+    "init": [],
+    "preLaunch": []
   },
   "mixins": [
     "modid.mixins.json"

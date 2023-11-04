@@ -6,6 +6,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(CreeperEntity.class)
 public interface CreeperEntityAccess {
-    @Accessor("determinedToExplode")
-    public void setIsDeterminedToExplode(boolean determinedToExplode);
+    @Accessor(value = "determinedToExplode", remap = false)
+    void setIsDeterminedToExplode(boolean determinedToExplode);
 }

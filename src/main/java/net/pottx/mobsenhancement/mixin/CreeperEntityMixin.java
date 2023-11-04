@@ -5,6 +5,7 @@ import net.minecraft.src.DamageSource;
 import net.minecraft.src.EntityCreeper;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.World;
+import net.pottx.mobsenhancement.access.EntityMobAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(CreeperEntity.class)
 public abstract class CreeperEntityMixin extends EntityCreeper {
-    @Shadow
+    @Shadow(remap = false)
     public abstract int getNeuteredState();
 
     public CreeperEntityMixin(World par1World) {
@@ -34,8 +35,10 @@ public abstract class CreeperEntityMixin extends EntityCreeper {
             method = "<init>",
             at = @At(value = "TAIL")
     )
-    private void resetFuseTime(CallbackInfo ci) {
+    private void resetFuseTimeAndXray(CallbackInfo ci) {
         ((EntityCreeperAccess)this).setFuseTime(20);
+
+        if (((EntityMobAccess)this).getCanXray() == (byte)1 && this.rand.nextInt(2) == 0) ((EntityMobAccess)this).setCanXray((byte)0);
     }
 
     @Inject(

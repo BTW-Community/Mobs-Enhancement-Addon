@@ -59,8 +59,6 @@ public abstract class EntityPlayerMixin extends EntityLiving implements ICommand
 
         if (!veryCloseDragons.isEmpty() || !veryCloseEndermen.isEmpty()) return true;
 
-        //List closeDragons = this.worldObj.selectEntitiesWithinAABB(EntityDragon.class, this.boundingBox.expand(128.0D, 128.0D, 128.0D), IEntitySelector.selectAnything);
-
         List closeEndermen = this.worldObj.selectEntitiesWithinAABB(EndermanEntity.class, this.boundingBox.expand(64.0D, 64.0D, 64.0D), IEntitySelector.selectAnything);
 
         Vec3 vLook = this.getLook(1F).normalize();

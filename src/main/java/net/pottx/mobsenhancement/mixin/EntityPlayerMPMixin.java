@@ -33,7 +33,7 @@ public abstract class EntityPlayerMPMixin extends EntityPlayer {
             method = "updateGloomState()V",
             at = @At("HEAD")
     )
-    private void doubleInGloomCountWhenCloseToEnd(CallbackInfo ci) {
+    private void fasterInGloomCountWhenCloseToEnd(CallbackInfo ci) {
         if (!this.isDead && ((EntityPlayerAccess)this).isCloseToEnd()) {
             inGloomCounter += 3;
         }

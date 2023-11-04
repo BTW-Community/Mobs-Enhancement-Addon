@@ -5,7 +5,6 @@ import net.minecraft.src.*;
 import java.util.List;
 
 public class EntityAIFleeFromEnemy extends EntityAIBase {
-    public final IEntitySelector entitySelector = new EntityAIFleeFromEntitySelector(this);
     private EntityCreature theEntity;
     private Entity targetEntity;
     private PathEntity fleePath;
@@ -31,14 +30,16 @@ public class EntityAIFleeFromEnemy extends EntityAIBase {
 
             if (this.targetEntity == null) return false;
         } else {
-            List closeEntities = this.theEntity.worldObj.selectEntitiesWithinAABB(this.targetEntityClass, this.theEntity.boundingBox.expand(this.distanceFromTarget, 3.0D, this.distanceFromTarget), this.entitySelector);
+            List closeEntities = this.theEntity.worldObj.getEntitiesWithinAABB(this.targetEntityClass, this.theEntity.boundingBox.expand(this.distanceFromTarget, 3.0D, this.distanceFromTarget));
 
             if (closeEntities.isEmpty()) return false;
 
-            for (int i=0; i<closeEntities.size(); i++) {
-                if (((EntityCreature)closeEntities.get(i)).getAttackTarget() == this.theEntity
-                        && this.theEntity.getEntitySenses().canSee((EntityLiving)closeEntities.get(i))) {
-                    this.targetEntity = (EntityLiving)closeEntities.get(i);
+            for (Object closeEntity : closeEntities) {
+                if (((EntityCreature)closeEntity).getAttackTarget() == this.theEntity
+                        && this.theEntity.getEntitySenses().canSee((EntityLiving)closeEntity)
+                        && ((EntityLiving)closeEntity).isEntityAlive()) {
+                    this.targetEntity = (EntityLiving)closeEntity;
+                    break;
                 }
             }
         }
@@ -65,9 +66,5 @@ public class EntityAIFleeFromEnemy extends EntityAIBase {
 
     public void resetTask() {
         this.targetEntity = null;
-    }
-
-    public EntityLiving getHost() {
-        return this.theEntity;
     }
 }

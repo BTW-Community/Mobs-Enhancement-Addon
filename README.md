@@ -26,6 +26,7 @@ This is a Minecraft Better Than Wolves addon that aims to slightly strengthen mo
 - Skeletons try not to get too close to dangerous targets when holding a bow.
 - Skeletons flee from dangerous targets when their health is low.
 - Skeletons' max health is decreased from 20 to 16.
+- Skeletons target villagers.
 - Skeletons try to break nearby burning torches.
 - Skeletons have a chance to be able to sense targets through opaque blocks.
 - Skeletons try to flee from explosions.
@@ -44,6 +45,7 @@ This is a Minecraft Better Than Wolves addon that aims to slightly strengthen mo
 - Witches move faster.
 - Witches predict their target's position before throwing potions.
 - Witches try not to get too close to dangerous targets.
+- Witches target villagers.
 - Witches have a chance to be able to sense targets through opaque blocks.
 - Witches try to flee from explosions.
 

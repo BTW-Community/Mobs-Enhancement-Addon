@@ -20,7 +20,7 @@
     "preLaunch": []
   },
   "mixins": [
-    "modid.mixins.json"
+    "mobsenhancement.mixins.json"
   ],
 
   "depends": {

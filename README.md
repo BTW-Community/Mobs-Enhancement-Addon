@@ -1,6 +1,6 @@
 # Mobs Enhancement Addon
 
-![Mod Thumbnail](.\\src\\main\\resources\\mobsenhancement\\thumbnail.png)
+![Mod Thumbnail](src/main/resources/mobsenhancement/thumbnail.png "Happy Creeper")
 
 This is a Minecraft Better Than Wolves addon that aims to slightly strengthen mobs, adding difficulty to the game.
 
@@ -12,6 +12,7 @@ This is a Minecraft Better Than Wolves addon that aims to slightly strengthen mo
 - Mobs' senses are strengthened, with further target distance and more points to check, instead of only doing an eye-to-eye check.
 - Mobs cannot see entities behind them unless they are very close.
 - Mobs can see through transparent blocks such as glass, leaves.
+- Mobs no longer try to watch the closest player.
 
 ### Zombies
 

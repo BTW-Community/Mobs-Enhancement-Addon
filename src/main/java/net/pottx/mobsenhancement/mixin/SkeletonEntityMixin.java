@@ -6,6 +6,7 @@ import net.pottx.mobsenhancement.*;
 import net.pottx.mobsenhancement.access.EntityArrowAccess;
 import net.minecraft.src.*;
 import net.pottx.mobsenhancement.access.EntityMobAccess;
+import net.pottx.mobsenhancement.access.SkeletonEntityAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(SkeletonEntity.class)
-public abstract class SkeletonEntityMixin extends EntitySkeleton {
+public abstract class SkeletonEntityMixin extends EntitySkeleton implements SkeletonEntityAccess {
     public SkeletonEntityMixin(World world) {
         super(world);
     }
@@ -27,14 +28,19 @@ public abstract class SkeletonEntityMixin extends EntitySkeleton {
     @Unique
     private EntityAISmartAttackOnCollide aiSmartMeleeAttack;
 
+    @Unique
+    private boolean isBreakingTorch;
+
     @Inject(
             method = "<init>",
             at = @At(value = "TAIL")
     )
     private void addExtraTasks(CallbackInfo ci) {
+        this.tasks.removeAllTasksOfClass(EntityAIWatchClosest.class);
+
         tasks.addTask(2, new EntityAIFleeFromExplosion(this, 0.375F, 4.0F));
         tasks.addTask(3, new EntityAIFleeFromEnemy(this, EntityPlayer.class, 0.375F, 24.0F, 5));
-        tasks.addTask(4, new SkeletonBreakTorchBehavior(this));
+        this.targetTasks.addTask(4, new SkeletonBreakTorchBehavior(this));
         this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, VillagerEntity.class, 24.0F, 0, ((EntityMobAccess)this).getCanXray() == (byte)0));
     }
 
@@ -87,6 +93,16 @@ public abstract class SkeletonEntityMixin extends EntitySkeleton {
     private void addSmartMeleeAttackAI(Args args) {
         args.set(1, this.aiSmartMeleeAttack);
     }
+
+    @Unique
+    public boolean getIsBreakingTorch() {
+        return this.isBreakingTorch;
+    }
+
+    @Unique
+    public void setIsBreakingTorch(boolean isBreakingTorch) {
+        this.isBreakingTorch = isBreakingTorch;
+    };
 
     @Override
     public void addRandomArmor() {

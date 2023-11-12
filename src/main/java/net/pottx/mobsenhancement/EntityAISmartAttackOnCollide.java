@@ -1,6 +1,8 @@
 package net.pottx.mobsenhancement;
 
+import btw.entity.mob.ZombieEntity;
 import net.minecraft.src.*;
+import net.pottx.mobsenhancement.access.ZombieEntityAccess;
 
 public class EntityAISmartAttackOnCollide extends EntityAIBase
 {
@@ -35,6 +37,8 @@ public class EntityAISmartAttackOnCollide extends EntityAIBase
 
         if (var1 == null) {
             return false;
+        } else if (this.attacker instanceof ZombieEntity && ((ZombieEntityAccess) this.attacker).getIsBreakingBlock()){
+            return false;
         } else {
             this.shouldFlee = var1 instanceof EntityPlayer || var1.getAttackTarget() == this.attacker;
 
@@ -51,6 +55,8 @@ public class EntityAISmartAttackOnCollide extends EntityAIBase
     public boolean continueExecuting() {
         if (this.attacker.getHealth() < this.minHealth) {
             return false;
+        } else if (this.attacker instanceof ZombieEntity && ((ZombieEntityAccess) this.attacker).getIsBreakingBlock()){
+            return false;
         } else {
             EntityLiving var1 = this.attacker.getAttackTarget();
             return var1 == null ? false : (!this.entityTarget.isEntityAlive() ? false : (!this.field_75437_f ? !this.attacker.getNavigator().noPath() : this.attacker.isWithinHomeDistance(MathHelper.floor_double(this.entityTarget.posX), MathHelper.floor_double(this.entityTarget.posY), MathHelper.floor_double(this.entityTarget.posZ))));
@@ -66,9 +72,8 @@ public class EntityAISmartAttackOnCollide extends EntityAIBase
     public void resetTask()
     {
     	// FCMOD: Added
-    	if ( attacker.getAttackTarget() == entityTarget )
-    	{
-    		attacker.setAttackTarget( null );
+    	if ( attacker.getAttackTarget() == entityTarget ) {
+    		attacker.setAttackTarget(null);
     	}
     	// END FCMOD
         this.entityTarget = null;
@@ -79,8 +84,7 @@ public class EntityAISmartAttackOnCollide extends EntityAIBase
     {
         this.attacker.getLookHelper().setLookPositionWithEntity(this.entityTarget, 30.0F, 30.0F);
 
-        if ((this.field_75437_f || this.attacker.getEntitySenses().canSee(this.entityTarget)) && --this.field_75445_i <= 0)
-        {
+        if ((this.field_75437_f || this.attacker.getEntitySenses().canSee(this.entityTarget)) && --this.field_75445_i <= 0) {
             this.field_75445_i = 4 + this.attacker.getRNG().nextInt(7);
             this.attacker.getNavigator().tryMoveToEntityLiving(this.entityTarget, this.field_75440_e);
         }
@@ -90,19 +94,16 @@ public class EntityAISmartAttackOnCollide extends EntityAIBase
         double dToolLength = this.attacker.getHeldItem() == null ? 0.0D : (this.attacker.getHeldItem().getItem().isItemTool(this.attacker.getHeldItem()) ? 2.0D : 0.0D);
         double var1 = (dCombinedWidth + dToolLength) * (dCombinedWidth + dToolLength);
         
-        if ( entityTarget == attacker.riddenByEntity )
-        {
+        if ( entityTarget == attacker.riddenByEntity ) {
         	return;
         }
 
-        if (this.attacker.getDistanceSq(this.entityTarget.posX, this.entityTarget.boundingBox.minY, this.entityTarget.posZ) <= var1)
-        {
-            if (this.attackTick <= 0)
-            {
+        if (this.attacker.getEntitySenses().canSee(this.entityTarget) &&
+                this.attacker.getDistanceSq(this.entityTarget.posX, this.entityTarget.boundingBox.minY, this.entityTarget.posZ) <= var1) {
+            if (this.attackTick <= 0) {
                 this.attackTick = 20;
 
-                if (this.attacker.getHeldItem() != null)
-                {
+                if (this.attacker.getHeldItem() != null) {
                     this.attacker.swingItem();
                 }
 

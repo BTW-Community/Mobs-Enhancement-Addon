@@ -49,6 +49,8 @@ public class EntityAIFleeFromExplosion extends EntityAIBase {
             }
         }
 
+        if (this.targetEntity == null) return false;
+
         Vec3 destination = RandomPositionGenerator.findRandomTargetBlockAwayFrom(this.theEntity, 6, 4, this.theEntity.worldObj.getWorldVec3Pool().getVecFromPool(this.targetEntity.posX, this.targetEntity.posY, this.targetEntity.posZ));
 
         if (destination == null) {

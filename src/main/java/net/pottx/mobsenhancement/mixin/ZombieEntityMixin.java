@@ -6,8 +6,10 @@ import net.minecraft.src.*;
 import net.pottx.mobsenhancement.EntityAIBreakBlock;
 import net.pottx.mobsenhancement.EntityAISmartAttackOnCollide;
 import net.pottx.mobsenhancement.access.EntityMobAccess;
+import net.pottx.mobsenhancement.access.ZombieEntityAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
@@ -16,7 +18,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(ZombieEntity.class)
-public abstract class ZombieEntityMixin extends EntityZombie {
+public abstract class ZombieEntityMixin extends EntityZombie implements ZombieEntityAccess {
+    @Unique
+    private boolean isBreakingBlock = false;
     @Shadow
     private IEntitySelector targetEntitySelector;
 
@@ -30,8 +34,11 @@ public abstract class ZombieEntityMixin extends EntityZombie {
     )
     private void addBreakBlockTask(CallbackInfo ci) {
         this.targetTasks.removeAllTasksOfClass(EntityAINearestAttackableTarget.class);
+        this.tasks.removeAllTasksOfClass(EntityAIWatchClosest.class);
+        this.tasks.removeAllTasksOfClass(EntityAIAttackOnCollide.class);
 
         this.tasks.addTask(1, new EntityAIBreakBlock(this));
+        this.tasks.addTask(2, new EntityAISmartAttackOnCollide(this, this.moveSpeed, false, 0));
 
         this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 24.0F, 0,
                 ((EntityMobAccess)this).getCanXray() == (byte)0));
@@ -66,4 +73,14 @@ public abstract class ZombieEntityMixin extends EntityZombie {
         args.set(1, new EntityAINearestAttackableTarget(this, EntityCreature.class, 24F, 0,
                 false, false, targetEntitySelector));
     }
+
+    @Unique
+    public boolean getIsBreakingBlock() {
+        return this.isBreakingBlock;
+    }
+
+    @Unique
+    public void setIsBreakingBlock(boolean isBreakingBlock) {
+        this.isBreakingBlock = isBreakingBlock;
+    };
 }

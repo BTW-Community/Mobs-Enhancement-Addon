@@ -1,10 +1,7 @@
 package net.pottx.mobsenhancement.mixin;
 
 import btw.entity.mob.CreeperEntity;
-import net.minecraft.src.DamageSource;
-import net.minecraft.src.EntityCreeper;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.World;
+import net.minecraft.src.*;
 import net.pottx.mobsenhancement.access.EntityMobAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -26,6 +23,7 @@ public abstract class CreeperEntityMixin extends EntityCreeper {
     public boolean attackEntityFrom(DamageSource par1DamageSource, int par2) {
         if (par1DamageSource.isExplosion() && this.getNeuteredState() == 0) {
             ((CreeperEntityAccess)this).setIsDeterminedToExplode(true);
+            this.setCreeperState(1);
             return false;
         }
         return super.attackEntityFrom(par1DamageSource, par2);
@@ -39,6 +37,8 @@ public abstract class CreeperEntityMixin extends EntityCreeper {
         ((EntityCreeperAccess)this).setFuseTime(20);
 
         if (((EntityMobAccess)this).getCanXray() == (byte)1 && this.rand.nextInt(2) == 0) ((EntityMobAccess)this).setCanXray((byte)0);
+
+        this.tasks.removeAllTasksOfClass(EntityAIWatchClosest.class);
     }
 
     @Inject(

@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
@@ -37,6 +38,7 @@ public abstract class SkeletonEntityMixin extends EntitySkeleton implements Skel
     )
     private void addExtraTasks(CallbackInfo ci) {
         this.tasks.removeAllTasksOfClass(EntityAIWatchClosest.class);
+        this.tasks.removeAllTasksOfClass(EntityAIFleeSun.class);
 
         tasks.addTask(2, new EntityAIFleeFromExplosion(this, 0.375F, 4.0F));
         tasks.addTask(3, new EntityAIFleeFromEnemy(this, EntityPlayer.class, 0.375F, 24.0F, 5));
@@ -59,7 +61,20 @@ public abstract class SkeletonEntityMixin extends EntitySkeleton implements Skel
             locals = LocalCapture.CAPTURE_FAILHARD
     )
     private void resetArrowForPrediction(EntityLiving target, float fDamageModifier, CallbackInfo ci, EntityArrow arrow) {
-        ((EntityArrowAccess)arrow).resetForPrediction(this, target, 1.6F, 6F);
+        int i = MEAUtils.getGameProgressMobsLevel(this.worldObj);
+        float f = i > 2 ? 2F : (i > 1 ? 4F : (i > 0 ? 6F : 8F));
+        ((EntityArrowAccess)arrow).resetForPrediction(this, target, 1.6F, f);
+    }
+
+    @Inject(
+            method = "initCreature()V",
+            at = @At(value = "TAIL")
+    )
+    private void witherChanceAfterNether(CallbackInfo ci) {
+        if (this.worldObj.provider.dimensionId == 0 && this.posY < 32 && getRNG().nextInt( 4 ) == 0)
+        {
+            setSkeletonType( 1 );
+        }
     }
 
     @ModifyArgs(
@@ -111,5 +126,13 @@ public abstract class SkeletonEntityMixin extends EntitySkeleton implements Skel
         if (getHeldItem().itemID != Item.bow.itemID) {
             equipmentDropChances[0] = 0.99F;
         }
+    }
+
+    @Redirect(
+            method = "onLivingUpdate()V",
+            at = @At(value = "INVOKE", target = "Lbtw/entity/mob/SkeletonEntity;checkForCatchFireInSun()V")
+    )
+    private void skipSunCheck(SkeletonEntity skeletonEntity)
+    {
     }
 }

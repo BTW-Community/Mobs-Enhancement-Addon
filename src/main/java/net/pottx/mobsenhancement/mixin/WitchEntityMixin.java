@@ -7,6 +7,7 @@ import net.minecraft.src.EntityAIWatchClosest;
 import net.minecraft.src.EntityWitch;
 import net.minecraft.src.World;
 import net.pottx.mobsenhancement.EntityAIFleeFromExplosion;
+import net.pottx.mobsenhancement.MEAUtils;
 import net.pottx.mobsenhancement.access.EntityMobAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -28,5 +29,11 @@ public abstract class WitchEntityMixin extends EntityWitch {
 
         tasks.addTask(1, new EntityAIFleeFromExplosion(this, 0.375F, 4.0F));
         this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, VillagerEntity.class, 24.0F, 0, ((EntityMobAccess)this).getCanXray() == (byte)0));
+    }
+
+    @Override
+    public int getMaxHealth() {
+        int i = MEAUtils.getGameProgressMobsLevel(this.worldObj);
+        return i > 0 ? 28 : 24;
     }
 }

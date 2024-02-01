@@ -1,6 +1,7 @@
 package net.pottx.mobsenhancement.mixin;
 
 import net.minecraft.src.*;
+import net.pottx.mobsenhancement.MEAUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,6 +22,15 @@ public abstract class EntitySilverfishMixin extends EntityMob {
         if (par1DamageSource instanceof EntityDamageSource && par2 < this.getHealth()) {
             this.split();
         }
+    }
+
+    @Inject(
+            method = "getMaxHealth()I",
+            at = @At(value = "HEAD"),
+            cancellable = true
+    )
+    private void returnScaledHealth(CallbackInfoReturnable<Integer> cir) {
+        cir.setReturnValue(MEAUtils.getGameProgressMobsLevel(this.worldObj) > 0 ? 12 : 8);
     }
 
     @Unique

@@ -2,6 +2,7 @@ package net.pottx.mobsenhancement.mixin;
 
 import btw.entity.mob.CreeperEntity;
 import net.minecraft.src.*;
+import net.pottx.mobsenhancement.MEAUtils;
 import net.pottx.mobsenhancement.access.EntityMobAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -34,9 +35,16 @@ public abstract class CreeperEntityMixin extends EntityCreeper {
             at = @At(value = "TAIL")
     )
     private void resetFuseTimeAndXray(CallbackInfo ci) {
-        ((EntityCreeperAccess)this).setFuseTime(20);
+        int i = MEAUtils.getGameProgressMobsLevel(this.worldObj);
+
+        ((EntityCreeperAccess)this).setFuseTime(i > 0 ? 20 : 25);
 
         if (((EntityMobAccess)this).getCanXray() == (byte)1 && this.rand.nextInt(2) == 0) ((EntityMobAccess)this).setCanXray((byte)0);
+
+        if (i > 0 && this.rand.nextInt(8) == 0)
+        {
+            this.dataWatcher.updateObject(17, Byte.valueOf((byte)1));
+        }
 
         this.tasks.removeAllTasksOfClass(EntityAIWatchClosest.class);
     }
@@ -47,7 +55,8 @@ public abstract class CreeperEntityMixin extends EntityCreeper {
             cancellable = true
     )
     private void explodeWithChance(EntityPlayer player, CallbackInfoReturnable<Boolean> cir) {
-        if (this.rand.nextInt(8) == 0) {
+        int i = this.getPowered() ? 2 : 8;
+        if (this.rand.nextInt(i) == 0) {
             boolean mobGriefing = this.worldObj.getGameRules().getGameRuleBooleanValue("mobGriefing");
 
             if (this.getPowered()) {
@@ -59,5 +68,11 @@ public abstract class CreeperEntityMixin extends EntityCreeper {
             this.setDead();
             cir.setReturnValue(super.interact(player));
         }
+    }
+
+    @Override
+    public int getMaxHealth() {
+        int i = MEAUtils.getGameProgressMobsLevel(this.worldObj);
+        return i > 0 ? 20 : 16;
     }
 }

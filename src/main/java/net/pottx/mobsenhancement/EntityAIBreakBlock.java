@@ -127,7 +127,8 @@ public class EntityAIBreakBlock extends EntityAIBase {
         double angel = Math.atan2(targetPosX + 0.5F - this.theEntity.posX, targetPosZ + 0.5F - this.theEntity.posZ) * 180 / Math.PI;
         angel = angel >= 0 ? 360 - angel : 0 - angel;
         if (this.theEntity.getDistanceSq((double)this.targetPosX + 0.5F, this.theEntity.posY, (double)this.targetPosZ + 0.5F) > 2.25D
-                || (Math.abs(yaw - (float)angel) > 45 && Math.abs(yaw - (float)angel) < 315) || Math.abs(this.theEntity.motionX) >= 0.25D || Math.abs(this.theEntity.motionY + 0.0784000015258789D) >= 0.01D || Math.abs(this.theEntity.motionZ) >= 0.25D || this.theEntity.isLivingDead) {
+                || (Math.abs(yaw - (float)angel) > 45 && Math.abs(yaw - (float)angel) < 315) || Math.abs(this.theEntity.motionX) >= 0.25D || Math.abs(this.theEntity.motionY + 0.0784000015258789D) >= 0.01D || Math.abs(this.theEntity.motionZ) >= 0.25D || this.theEntity.isLivingDead
+                || this.theEntity.worldObj.getBlockId(this.targetPosX, this.targetPosY, this.targetPosZ) != this.targetBlock.blockID) {
             this.hasStoppedBlockBreaking = true;
         }
 

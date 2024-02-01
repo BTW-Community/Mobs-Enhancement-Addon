@@ -1,10 +1,12 @@
 package net.pottx.mobsenhancement.mixin;
 
+import btw.entity.mob.SkeletonEntity;
 import btw.entity.mob.ZombieEntity;
 import btw.entity.mob.villager.VillagerEntity;
 import net.minecraft.src.*;
 import net.pottx.mobsenhancement.EntityAIBreakBlock;
 import net.pottx.mobsenhancement.EntityAISmartAttackOnCollide;
+import net.pottx.mobsenhancement.MEAUtils;
 import net.pottx.mobsenhancement.access.EntityMobAccess;
 import net.pottx.mobsenhancement.access.ZombieEntityAccess;
 import org.spongepowered.asm.mixin.Mixin;
@@ -83,4 +85,42 @@ public abstract class ZombieEntityMixin extends EntityZombie implements ZombieEn
     public void setIsBreakingBlock(boolean isBreakingBlock) {
         this.isBreakingBlock = isBreakingBlock;
     };
+
+    @Unique
+    public void onKilledBySun()
+    {
+        if (!this.worldObj.isRemote)
+        {
+            SkeletonEntity skeleton = (SkeletonEntity) EntityList.createEntityOfType(SkeletonEntity.class, this.worldObj);
+            skeleton.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
+            skeleton.setEntityHealth(MathHelper.ceiling_float_int((float) skeleton.getMaxHealth() / 2.0F));
+            for (int i = 0; i < 5 ; i++) {
+                skeleton.setCurrentItemOrArmor(0, this.getCurrentItemOrArmor(0));
+            }
+            this.worldObj.spawnEntityInWorld(skeleton);
+            this.setDead();
+        }
+    }
+
+    @Override
+    public int getMaxHealth() {
+        int i = MEAUtils.getGameProgressMobsLevel(this.worldObj);
+        return i > 1 ? 24 : (i > 0 ? 20 : 16);
+    }
+
+    @Override
+    protected void damageEntity(DamageSource par1DamageSource, int par2)
+    {
+        if (!this.isEntityInvulnerable())
+        {
+            if (par1DamageSource == DamageSource.onFire && !this.isVillager() && this.health <= par2)
+            {
+                this.onKilledBySun();
+            }
+            else
+            {
+                super.damageEntity(par1DamageSource, par2);
+            }
+        }
+    }
 }

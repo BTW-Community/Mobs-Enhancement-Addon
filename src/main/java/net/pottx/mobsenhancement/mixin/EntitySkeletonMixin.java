@@ -2,6 +2,7 @@ package net.pottx.mobsenhancement.mixin;
 
 import btw.item.BTWItems;
 import net.minecraft.src.*;
+import net.pottx.mobsenhancement.MEAUtils;
 import net.pottx.mobsenhancement.access.EntityMobAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -31,7 +32,10 @@ public abstract class EntitySkeletonMixin extends EntityMob {
             cancellable = true
     )
     private void returnSmallerMaxHealth(CallbackInfoReturnable<Integer> cir) {
-        cir.setReturnValue(16);
+        int i = MEAUtils.getGameProgressMobsLevel(this.worldObj);
+        i = i > 1 ? 20 : (i > 0 ? 16 : 12);
+
+        cir.setReturnValue(i);
     }
 
     @Inject(

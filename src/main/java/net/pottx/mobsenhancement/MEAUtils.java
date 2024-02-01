@@ -1,13 +1,9 @@
 package net.pottx.mobsenhancement;
 
 import btw.block.BTWBlocks;
-import net.pottx.mobsenhancement.access.EntityMobAccess;
-import net.pottx.mobsenhancement.access.EntityPlayerAccess;
+import btw.world.util.WorldUtils;
 import net.minecraft.src.*;
-import net.pottx.mobsenhancement.mixin.EntityAccess;
-import net.pottx.mobsenhancement.mixin.EntityLivingAccess;
-
-import java.util.Random;
+import net.pottx.mobsenhancement.access.EntityPlayerAccess;
 
 public class MEAUtils {
     public static double[] predictRelativeXZOnRangedHit(EntityLiving target, double initRelativeX, double initRelativeY, double initRelativeZ, float projectileVelocity) {
@@ -278,5 +274,22 @@ public class MEAUtils {
         }
 
         return null;
+    }
+
+    public static int getGameProgressMobsLevel(World world) {
+        if (!world.worldInfo.getDifficulty().shouldHCSRangeIncrease()) {
+            return 0;
+        }
+        else if (WorldUtils.gameProgressHasEndDimensionBeenAccessedServerOnly()) {
+            return 3;
+        }
+        else if (WorldUtils.gameProgressHasWitherBeenSummonedServerOnly()) {
+            return 2;
+        }
+        else if (WorldUtils.gameProgressHasNetherBeenAccessedServerOnly()) {
+            return 1;
+        }
+
+        return 0;
     }
 }

@@ -48,4 +48,14 @@ public abstract class MagmaCubeEntityMixin extends EntityMagmaCube {
         }
         super.setDead();
     }
+
+    @Override
+    public int getMaxHealth()
+    {
+        int i = MEAUtils.getGameProgressMobsLevel(this.worldObj);
+        i = i > 1 ? 1 : 0;
+        int var1 = this.getSlimeSize() + i;
+
+        return var1 * var1;
+    }
 }

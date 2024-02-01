@@ -12,21 +12,28 @@ This is a Minecraft Better Than Wolves addon that aims to slightly strengthen mo
 - Mobs' senses are strengthened, with further target distance and more points to check, instead of only doing an eye-to-eye check.
 - Mobs cannot see entities behind them unless they are very close.
 - Mobs can see through transparent blocks such as glass, leaves.
-- Mobs no longer try to watch the closest player.
+- Mobs no longer try to stare at the closest player.
+- Hostile mobs' max health increase when the first nether portal is constructed.
+- Nether and undead mobs' max health increase when the first wither is summoned.
 
 ### Zombies
 
 - Zombies are able to break certain types of blocks blocking the way to their attack target, determined by their held item.
+- Zombies' base max health is decreased from 20 to 16.
 - Zombies have a chance to be able to sense targets through opaque blocks.
+- Zombies transform into a skeleton of half its max health when die of sunlight, 
 
 ### Skeletons
 
 - Skeletons move faster.
+- Skeletons no longer burn under sunlight.
 - Skeletons have a chance to spawn with a melee weapon instead of a bow.
+- Skeletons have a chance to spawn as a wither skeleton in the overworld at a low Y level after the first nether portal is constructed.
 - Skeletons predict their target's position before ranged attacks.
+- Skeletons' accuracy increases when the first nether portal is constructed, and when the first wither is summoned.
 - Skeletons try not to get too close to dangerous targets when holding a bow.
 - Skeletons flee from dangerous targets when their health is low.
-- Skeletons' max health is decreased from 20 to 16.
+- Skeletons' base max health is decreased from 20 to 12.
 - Skeletons target villagers.
 - Skeletons try to break nearby burning torches.
 - Skeletons have a chance to be able to sense targets through opaque blocks.
@@ -34,9 +41,11 @@ This is a Minecraft Better Than Wolves addon that aims to slightly strengthen mo
 
 ### Creepers
 
-- Creepers' fuse time is decreased from 1.5 seconds to 1 second.
+- Creepers have a chance to spawn charged after the first nether portal is constructed.
+- Creepers' base fuse time is decreased from 1.5 seconds to 1.25 second.
+- Creepers' fuse time decrease when the first nether portal is constructed.
 - Creepers' explosions spawn at the center of them, instead of the bottom.
-- Creepers have a chance to instantly explode when interacted with shears.
+- Creepers have a chance to instantly explode when interacted with shears, the chance is higher when charged.
 - Creepers explode when damaged by explosions.
 - Creepers don't immediately stop fusing on sight being blocked.
 - Creepers have a chance to be able to sense targets through opaque blocks.
@@ -52,6 +61,7 @@ This is a Minecraft Better Than Wolves addon that aims to slightly strengthen mo
 
 ### Spiders
 
+- Spiders have a high chance to spawn with a random positive potion effect after the first nether portal is constructed.
 - Cobwebs don't only slow down entities' move speed, but also make players hardly rotate their look direction.
 
 ### Slimes
@@ -74,11 +84,16 @@ This is a Minecraft Better Than Wolves addon that aims to slightly strengthen mo
 - Small magma cubes melt into a puddle of lava on death.
 - Magma cubes regenerate their health when touching lava.
 
+### Blazes
+
+- Blazes' fireballs cause explosions after the first wither is summoned.
+
 ### Ghasts
 
 - Ghasts have a translucent look.
 - Arrows and throwable items cannot collide with ghasts, instead fly through them.
 - Ghasts only take damage from fireballs and magic.
+- Ghasts' fireballs cause larger explosions after the first wither is summoned.
 
 ### Withers
 

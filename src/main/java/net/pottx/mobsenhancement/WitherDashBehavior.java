@@ -39,7 +39,7 @@ public class WitherDashBehavior extends EntityAIBase {
     public void resetTask() {
         super.resetTask();
 
-        this.dashCooldownCounter = 80 + this.myWither.rand.nextInt(40);
+        this.dashCooldownCounter = (this.myWither.posY > 256D ? 40 : 80) + this.myWither.rand.nextInt(40);
         ((WitherEntityAccess) this.myWither).setIsDoingSpecialAttack(false);
     }
 

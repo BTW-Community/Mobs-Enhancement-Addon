@@ -198,4 +198,51 @@ public abstract class WitherEntityMixin extends EntityWither implements WitherEn
             }
         }
     }
+
+    @Override
+    public boolean meleeAttack(Entity target)
+    {
+        setLastAttackingEntity( target );
+
+        int iStrength = getMeleeAttackStrength(target);
+
+        if ( isPotionActive( Potion.damageBoost ) )
+        {
+            iStrength += 3 << getActivePotionEffect( Potion.damageBoost ).getAmplifier();
+        }
+
+        if ( isPotionActive( Potion.weakness ) )
+        {
+            iStrength -= 2 << getActivePotionEffect( Potion.weakness ).getAmplifier();
+        }
+
+        int iKnockback = 2;
+
+        boolean bAttackSuccess = target.attackEntityFrom( DamageSource.causeMobDamage( this ),
+                iStrength );
+
+        if ( bAttackSuccess )
+        {
+            target.addVelocity(
+                    -MathHelper.sin( rotationYaw * (float)Math.PI / 180F ) * iKnockback * 0.5F,
+                    0.1D,
+                    MathHelper.cos( rotationYaw * (float)Math.PI / 180F ) * iKnockback * 0.5F );
+
+            motionX *= 0.6D;
+            motionZ *= 0.6D;
+
+            int iFireModifier = EnchantmentHelper.getFireAspectModifier( this );
+
+            if ( iFireModifier > 0 )
+            {
+                target.setFire( iFireModifier * 4 );
+            }
+            else if ( isBurning() && rand.nextFloat() < 0.6F )
+            {
+                target.setFire( 4 );
+            }
+        }
+
+        return bAttackSuccess;
+    }
 }

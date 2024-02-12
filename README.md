@@ -15,6 +15,7 @@ This is a Minecraft Better Than Wolves addon that aims to slightly strengthen mo
 - Mobs no longer try to stare at the closest player.
 - Hostile mobs' max health increase when the first nether portal is constructed.
 - Nether and undead mobs' max health increase when the first wither is summoned.
+- Hostile mobs have a higher chance to spawn in groups after the first end portal is activated.
 
 ### Zombies
 
@@ -31,6 +32,7 @@ This is a Minecraft Better Than Wolves addon that aims to slightly strengthen mo
 - Skeletons have a chance to spawn as a wither skeleton in the overworld at a low Y level after the first nether portal is constructed.
 - Skeletons predict their target's position before ranged attacks.
 - Skeletons' accuracy increases when the first nether portal is constructed, and when the first wither is summoned.
+- Skeletons' bows have limited durability, which increases when the first nether portal is constructed, and when the first wither is summoned.
 - Skeletons try not to get too close to dangerous targets when holding a bow.
 - Skeletons flee from dangerous targets when their health is low.
 - Skeletons' base max health is decreased from 20 to 12.

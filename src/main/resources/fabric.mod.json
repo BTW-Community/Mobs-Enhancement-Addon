@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "mobsenhancement",
-  "version": "0.2.0",
+  "version": "0.2.2",
 
   "name": "Mobs Enhancement Addon",
   "description": "Slightly strengthens monsters.",

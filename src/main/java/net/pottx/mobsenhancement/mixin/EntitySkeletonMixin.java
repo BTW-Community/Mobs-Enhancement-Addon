@@ -5,6 +5,7 @@ import net.minecraft.src.*;
 import net.pottx.mobsenhancement.MEAUtils;
 import net.pottx.mobsenhancement.access.EntityMobAccess;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
@@ -14,6 +15,8 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(EntitySkeleton.class)
 public abstract class EntitySkeletonMixin extends EntityMob {
+    @Shadow private EntityAIArrowAttack aiArrowAttack;
+
     public EntitySkeletonMixin(World par1World) {
         super(par1World);
     }
@@ -46,6 +49,18 @@ public abstract class EntitySkeletonMixin extends EntityMob {
         if (this.rand.nextInt(8) == 0) {
             this.setCurrentItemOrArmor(0, this.rand.nextInt(4) == 0 ? new ItemStack(Item.axeStone) : new ItemStack(BTWItems.boneClub));
         }
+    }
+
+    @ModifyArgs(
+            method = "addRandomArmor()V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/src/EntitySkeleton;setCurrentItemOrArmor(ILnet/minecraft/src/ItemStack;)V")
+    )
+    private void setDamagedBow(Args args) {
+        ItemStack bow = new ItemStack(Item.bow);
+        int i = MEAUtils.getGameProgressMobsLevel(this.worldObj);
+        i = i > 1 ? 15 : (i > 0 ? 9 : 5);
+        bow.setItemDamage(384 - (2 + this.rand.nextInt(i)));
+        args.set(1, bow);
     }
 
     @ModifyArgs(

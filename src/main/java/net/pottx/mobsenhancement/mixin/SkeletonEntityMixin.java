@@ -8,6 +8,7 @@ import net.minecraft.src.*;
 import net.pottx.mobsenhancement.access.EntityMobAccess;
 import net.pottx.mobsenhancement.access.SkeletonEntityAccess;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -16,6 +17,8 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(SkeletonEntity.class)
 public abstract class SkeletonEntityMixin extends EntitySkeleton implements SkeletonEntityAccess {
+    @Shadow public abstract void setCombatTask();
+
     public SkeletonEntityMixin(World world) {
         super(world);
     }
@@ -61,6 +64,27 @@ public abstract class SkeletonEntityMixin extends EntitySkeleton implements Skel
         int i = MEAUtils.getGameProgressMobsLevel(this.worldObj);
         float f = i > 2 ? 2F : (i > 1 ? 4F : (i > 0 ? 6F : 8F));
         ((EntityArrowAccess)arrow).resetForPrediction(this, target, 1.6F, f);
+    }
+
+    @Inject(
+            method = {"attackEntityWithRangedAttack(Lnet/minecraft/src/EntityLiving;F)V", "method_4552"},
+            at = @At(value = "TAIL")
+    )
+    private void damageBow(EntityLiving target, float fDamageModifier, CallbackInfo ci) {
+        ItemStack itemStack = this.getHeldItem();
+        if (itemStack.getItem() == Item.bow) {
+            itemStack.damageItem(1, this);
+            if (itemStack.stackSize <= 0) {
+                SkeletonEntity skeleton = (SkeletonEntity) EntityList.createEntityOfType(SkeletonEntity.class, this.worldObj);
+                skeleton.setSkeletonType(this.getSkeletonType());
+                skeleton.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
+                skeleton.setRotationYawHead(this.rotationYawHead);
+                skeleton.setEntityHealth(this.health);
+                skeleton.setCurrentItemOrArmor(0, (ItemStack) null);
+                this.setDead();
+                this.worldObj.spawnEntityInWorld(skeleton);
+            }
+        }
     }
 
     @Inject(
@@ -123,7 +147,7 @@ public abstract class SkeletonEntityMixin extends EntitySkeleton implements Skel
     @Unique
     public void setIsBreakingTorch(boolean isBreakingTorch) {
         this.isBreakingTorch = isBreakingTorch;
-    };
+    }
 
     @Override
     public void addRandomArmor() {
@@ -138,7 +162,6 @@ public abstract class SkeletonEntityMixin extends EntitySkeleton implements Skel
             method = "onLivingUpdate()V",
             at = @At(value = "INVOKE", target = "Lbtw/entity/mob/SkeletonEntity;checkForCatchFireInSun()V")
     )
-    private void skipSunCheck(SkeletonEntity skeletonEntity)
-    {
+    private void skipSunCheck(SkeletonEntity skeletonEntity) {
     }
 }
